@@ -1,4 +1,4 @@
-# [🌟 欢迎来到我的 GitHub 👋](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg4MzcxMjIzMQ==)
+# [🌟 欢迎来到我的 GitHub 👋](https://github.com/eugenezhang0223)
 
 ## 👨‍💻 关于我
 

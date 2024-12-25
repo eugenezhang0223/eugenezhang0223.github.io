@@ -1,4 +1,4 @@
-# 🌟 欢迎来到我的 GitHub 👋
+# [🌟 欢迎来到我的 GitHub 👋](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg4MzcxMjIzMQ==)
 
 ## 👨‍💻 关于我
 
@@ -61,7 +61,5 @@
 - ☁️ 云计算
 
 ---
-
-![页尾图片](https://github.com/eugenezhang0223/eugenezhang0223.github.io/blob/main/72055491b86619c8a1fa70b46b4c08b.jpg)
 
 ✨ 感谢您的访问！希望我的内容能为您带来启发！

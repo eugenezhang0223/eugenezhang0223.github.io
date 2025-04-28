@@ -29,6 +29,7 @@
             width: 100vw;
             height: 100vh;
             font-family: 'Rubik', sans-serif;
+            position: relative;
         }
 
         .confirm,
@@ -256,6 +257,21 @@
         .hidden {
             display: none;
         }
+
+        /* 修改图片样式 */
+        .full-screen-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            max-width: 80%; /* 占中央核心区域，两边留白 */
+            max-height: 80%;
+            object-fit: contain;
+            transition: transform 1.5s ease, opacity 1.5s ease; /* 变慢过渡动画 */
+            z-index: 9999;
+            pointer-events: none; /* 不影响点击事件 */
+        }
     </style>
 </head>
 <body>
@@ -308,6 +324,9 @@
         </div>
     </section>
 
+    <!-- 新增图片元素 -->
+    <img src="./skm.jpg" alt="收款码图片" class="full-screen-image">
+
     <script>
         const confirmSection = document.querySelector('.confirm');
         const acceptedSection = document.querySelector('.accepted');
@@ -315,6 +334,7 @@
         const boi = document.querySelector('.boi');
         const btnDelete = document.querySelector('.confirm-body-button-delete');
         const btnCancel = document.querySelector('.confirm-body-button-cancel');
+        const image = document.querySelector('.full-screen-image'); // 新增图片引用
         const current = {
             happiness: 0.9,
             derp: 1,
@@ -333,6 +353,12 @@
             acceptedSection.classList.remove('hidden');
             target.happiness = 1; // 开心到起飞
             updateBoi();
+
+            // 修改为 5 秒定时器
+            setTimeout(() => {
+                image.style.transform = 'translate(-50%, -50%) scale(1)';
+                image.style.opacity = '1';
+            }, 5000);
         });
 
         btnDelete.addEventListener('click', () => {
@@ -351,6 +377,9 @@
             acceptedSection.classList.add('hidden');
             confirmSection.classList.remove('hidden');
             resetBoi();
+            // 返回时隐藏图片
+            image.style.transform = 'translate(-50%, -50%) scale(0)';
+            image.style.opacity = '0';
         });
 
         rejectedSection.querySelector('a').addEventListener('click', () => {
@@ -411,3 +440,4 @@
     </script>
 </body>
 </html>
+    

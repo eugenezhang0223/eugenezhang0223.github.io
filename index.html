@@ -30,6 +30,7 @@
             height: 100vh;
             font-family: 'Rubik', sans-serif;
             position: relative;
+            overflow: hidden;
         }
 
         .confirm,
@@ -99,19 +100,23 @@
             margin-bottom: 1rem;
             min-width: 10rem;
             text-align: center;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: all 0.3s ease;
+            position: absolute;
+            transform-origin: center;
         }
 
         .confirm-body-button-delete {
             background-color: #a43;
-        }
-
-        .confirm-body-button-delete:hover {
-            background-color: #c85a48;
+            right: 0;
         }
 
         .confirm-body-button-cancel {
             background-color: #6a4;
+            left: 0;
+        }
+
+        .confirm-body-button-delete:hover {
+            background-color: #c85a48;
         }
 
         .confirm-body-button-cancel:hover {
@@ -257,29 +262,13 @@
         .hidden {
             display: none;
         }
-
-        /* 修改图片样式 */
-        .full-screen-image {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            max-width: 80%; /* 占中央核心区域，两边留白 */
-            max-height: 80%;
-            object-fit: contain;
-            transition: transform 1.5s ease, opacity 1.5s ease; /* 变慢过渡动画 */
-            z-index: 9999;
-            pointer-events: none; /* 不影响点击事件 */
-        }
     </style>
 </head>
 <body>
-    <!-- 初始界面 -->
     <section class="confirm">
         <div class="confirm-body">
-            <h2 class="confirm-body-title">你知道的，我们作为朋友，能请我喝一杯蜜雪冰城吗？</h2>
-            <h3 class="confirm-body-subtitle">希望你能通过微信直接转账给我，是否接受？</h3>
+            <h2 class="confirm-body-title">姐是郑佳梦</h2>
+            <h3 class="confirm-body-subtitle">可以成为我的恋人吗？</h3>
             <figure class="boi" style="--happiness:0.9; --derp:1; --px:0.5; --py:0.5;">
                 <div class="boi-blush boi-blush-left"></div>
                 <div class="boi-blush boi-blush-right"></div>
@@ -287,16 +276,15 @@
                 <div class="boi-eye boi-eye-right"></div>
                 <div class="boi-mouth"></div>
             </figure>
-            <a class="confirm-body-button confirm-body-button-cancel" href="javascript:void(0)">接受</a>
-            <a class="confirm-body-button confirm-body-button-delete" href="javascript:void(0)">拒绝</a>
+            <a class="confirm-body-button confirm-body-button-cancel" href="javascript:void(0)">可以</a>
+            <a class="confirm-body-button confirm-body-button-delete" href="javascript:void(0)">不要</a>
         </div>
     </section>
 
-    <!-- 接受后的新界面 -->
     <section class="accepted hidden">
         <div class="accepted-body">
-            <h2 class="accepted-body-title">感谢你的蜜雪冰城！</h2>
-            <h3 class="accepted-body-subtitle">我非常开心，祝你五一假期开心快乐！</h3>
+            <h2 class="accepted-body-title">喜欢你</h2>
+            <h3 class="accepted-body-subtitle">(≧◡≦)♡ ˗ˋˏෆˎˊ˗ ๑˃̵ᴗ˂̵๑ ♡ </h3>
             <figure class="boi" style="--happiness:1; --derp:0; --px:0.5; --py:0.5;">
                 <div class="boi-blush boi-blush-left"></div>
                 <div class="boi-blush boi-blush-right"></div>
@@ -308,10 +296,9 @@
         </div>
     </section>
 
-    <!-- 拒绝后的新界面 -->
     <section class="rejected hidden">
         <div class="rejected-body">
-            <h2 class="rejected-body-title">我有点难过...小气鬼呜呜呜</h2>
+            <h2 class="rejected-body-title">我有点难过...</h2>
             <h3 class="rejected-body-subtitle">但我尊重你的决定，祝你一切顺利！</h3>
             <figure class="boi" style="--happiness:0.2; --derp:0; --px:0.5; --py:0.5;">
                 <div class="boi-blush boi-blush-left"></div>
@@ -324,9 +311,6 @@
         </div>
     </section>
 
-    <!-- 新增图片元素 -->
-    <img src="./skm.jpg" alt="收款码图片" class="full-screen-image">
-
     <script>
         const confirmSection = document.querySelector('.confirm');
         const acceptedSection = document.querySelector('.accepted');
@@ -334,110 +318,151 @@
         const boi = document.querySelector('.boi');
         const btnDelete = document.querySelector('.confirm-body-button-delete');
         const btnCancel = document.querySelector('.confirm-body-button-cancel');
-        const image = document.querySelector('.full-screen-image'); // 新增图片引用
-        const current = {
-            happiness: 0.9,
-            derp: 1,
-            px: 0.5,
-            py: 0.5
-        };
-        const target = { ...current };
+        
+        const rejectStages = [
+            { text: '不要', scale: 1 },
+            { text: '？你认真的吗？', scale: 0.8 },
+            { text: '要不再想想？', scale: 0.6 },
+            { text: '不许选这个', scale: 0.4 },
+            { text: '不要！', scale: 0.3 },
+            { text: '我会很伤心的...', scale: 0.25 },
+            { text: '不行o(╥﹏╥)o', scale: 0.2 },
+            { text: '真的要放弃吗？', scale: 0.18 },
+            { text: '最后再想一次', scale: 0.16 },
+            { text: '眼泪在打转', scale: 0.14 },
+            { text: '心好痛', scale: 0.12 },
+            { text: '第11次请求', scale: 0.11 },
+            { text: '第12次坚持', scale: 0.10 },
+            { text: '第13次期盼', scale: 0.09 },
+            { text: '第14次等待', scale: 0.08 },
+            { text: '第15次尝试', scale: 0.07 },
+            { text: '第16次恳求', scale: 0.06 },
+            { text: '第17次机会', scale: 0.05 },
+            { text: '第18次希望', scale: 0.04 },
+            { text: '第19次坚持', scale: 0.03 },
+            { text: '最后的机会', scale: 0.02 }
+        ];
+        
+        let currentStage = 0;
         let rejectCount = 0;
 
-        // 事件监听
-        confirmSection.addEventListener('mousemove', onMouseMove);
-        confirmSection.addEventListener('mouseleave', onMouseLeave);
+        function getRandomPosition() {
+            const container = confirmSection.getBoundingClientRect();
+            const btnWidth = btnDelete.offsetWidth * rejectStages[currentStage].scale;
+            const btnHeight = btnDelete.offsetHeight * rejectStages[currentStage].scale;
+            
+            return {
+                x: Math.random() * (container.width - btnWidth),
+                y: Math.random() * (container.height - btnHeight - 50) + 25
+            };
+        }
+
+        function isOverlap(pos1, pos2) {
+            const rect1 = {
+                left: pos1.x,
+                right: pos1.x + btnDelete.offsetWidth * rejectStages[currentStage].scale,
+                top: pos1.y,
+                bottom: pos1.y + btnDelete.offsetHeight * rejectStages[currentStage].scale
+            };
+            
+            const cancelRect = btnCancel.getBoundingClientRect();
+            const containerRect = confirmSection.getBoundingClientRect();
+            
+            const rect2 = {
+                left: cancelRect.left - containerRect.left,
+                right: cancelRect.right - containerRect.left,
+                top: cancelRect.top - containerRect.top,
+                bottom: cancelRect.bottom - containerRect.top
+            };
+
+            return !(rect1.right < rect2.left || 
+                   rect1.left > rect2.right || 
+                   rect1.bottom < rect2.top || 
+                   rect1.top > rect2.bottom);
+        }
 
         btnCancel.addEventListener('click', () => {
             confirmSection.classList.add('hidden');
             acceptedSection.classList.remove('hidden');
-            target.happiness = 1; // 开心到起飞
-            updateBoi();
-
-            // 修改为 5 秒定时器
-            setTimeout(() => {
-                image.style.transform = 'translate(-50%, -50%) scale(1)';
-                image.style.opacity = '1';
-            }, 5000);
         });
 
         btnDelete.addEventListener('click', () => {
             rejectCount++;
-            if (rejectCount >= 5) {
-                btnDelete.style.position = 'absolute';
-                btnDelete.style.left = `${Math.random() * 80}%`;
-                btnDelete.style.top = `${Math.random() * 80}%`;
+            currentStage = Math.min(rejectCount, rejectStages.length - 1);
+            
+            // 更新拒绝按钮状态
+            btnDelete.textContent = rejectStages[currentStage].text;
+            btnDelete.style.transform = `scale(${rejectStages[currentStage].scale})`;
+            
+            // 生成不重叠位置
+            let newPos;
+            let attempts = 0;
+            do {
+                newPos = getRandomPosition();
+                attempts++;
+            } while (isOverlap(newPos) && attempts < 100);
+            
+            btnDelete.style.left = `${newPos.x}px`;
+            btnDelete.style.top = `${newPos.y}px`;
+            
+            // 放大接受按钮
+            const cancelScale = 1 + (rejectCount * 0.15);
+            btnCancel.style.transform = `scale(${Math.min(cancelScale, 2)})`;
+            
+            // 第20次点击后跳转
+            if (rejectCount >= 20) {
+                setTimeout(() => {
+                    confirmSection.classList.add('hidden');
+                    rejectedSection.classList.remove('hidden');
+                }, 300);
             }
-            target.happiness = Math.max(0.1, target.happiness - 0.1); // 每次点击拒绝，表情更委屈
-            btnCancel.style.transform = `scale(${1 + rejectCount * 0.1})`; // 接受按钮变大
-            updateBoi();
         });
 
-        acceptedSection.querySelector('a').addEventListener('click', () => {
-            acceptedSection.classList.add('hidden');
-            confirmSection.classList.remove('hidden');
-            resetBoi();
-            // 返回时隐藏图片
-            image.style.transform = 'translate(-50%, -50%) scale(0)';
-            image.style.opacity = '0';
+        // 返回按钮逻辑
+        document.querySelectorAll('.accepted-body-button, .rejected-body-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                acceptedSection.classList.add('hidden');
+                rejectedSection.classList.add('hidden');
+                confirmSection.classList.remove('hidden');
+                
+                // 重置状态
+                rejectCount = 0;
+                currentStage = 0;
+                btnDelete.textContent = '不要';
+                btnDelete.style.transform = 'scale(1)';
+                btnDelete.style.left = 'auto';
+                btnDelete.style.right = '0';
+                btnDelete.style.top = 'auto';
+                btnCancel.style.transform = 'scale(1)';
+            });
         });
 
-        rejectedSection.querySelector('a').addEventListener('click', () => {
-            rejectedSection.classList.add('hidden');
-            confirmSection.classList.remove('hidden');
-            resetBoi();
-        });
+        // 面部表情动画逻辑
+        const current = { happiness: 0.9, derp: 1, px: 0.5, py: 0.5 };
+        const target = { ...current };
 
-        function onMouseMove({ clientX: x, clientY: y }) {
-            let dx1 = x - btnDelete.getBoundingClientRect().x - btnDelete.getBoundingClientRect().width * 0.5;
-            let dy1 = y - btnDelete.getBoundingClientRect().y - btnDelete.getBoundingClientRect().height * 0.5;
-            let dx2 = x - btnCancel.getBoundingClientRect().x - btnCancel.getBoundingClientRect().width * 0.5;
-            let dy2 = y - btnCancel.getBoundingClientRect().y - btnCancel.getBoundingClientRect().height * 0.5;
-            let px = (x - confirmSection.getBoundingClientRect().x) / confirmSection.getBoundingClientRect().width;
-            let py = (y - confirmSection.getBoundingClientRect().y) / confirmSection.getBoundingClientRect().height;
-            let distDelete = Math.sqrt(dx1 * dx1 + dy1 * dy1);
-            let distCancel = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-            let happiness = Math.pow(distDelete / (distCancel + distDelete), 0.75);
-
-            target.happiness = happiness;
+        confirmSection.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+            const container = confirmSection.getBoundingClientRect();
+            target.px = (x - container.left) / container.width;
+            target.py = (y - container.top) / container.height;
             target.derp = 0;
-            target.px = px;
-            target.py = py;
-        }
+        });
 
-        function onMouseLeave() {
+        confirmSection.addEventListener('mouseleave', () => {
             target.happiness = 0.9;
             target.derp = 1;
             target.px = 0.5;
             target.py = 0.5;
-        }
+        });
 
         function updateBoi() {
-            for (let prop in target) {
-                if (target[prop] === current[prop]) {
-                    continue;
-                } else if (Math.abs(target[prop] - current[prop]) < 0.01) {
-                    current[prop] = target[prop];
-                } else {
-                    current[prop] += (target[prop] - current[prop]) * 0.1;
-                }
-                boi.style.setProperty(`--${prop}`, current[prop]);
-            }
+            Object.keys(target).forEach(key => {
+                current[key] += (target[key] - current[key]) * 0.1;
+                boi.style.setProperty(`--${key}`, current[key]);
+            });
             requestAnimationFrame(updateBoi);
         }
-
-        function resetBoi() {
-            target.happiness = 0.9;
-            target.derp = 1;
-            target.px = 0.5;
-            target.py = 0.5;
-            rejectCount = 0;
-            btnCancel.style.transform = 'scale(1)';
-            btnDelete.style.position = 'static';
-        }
-
         updateBoi();
     </script>
 </body>
 </html>
-    
